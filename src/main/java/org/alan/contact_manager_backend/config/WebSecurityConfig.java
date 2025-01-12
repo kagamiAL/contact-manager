@@ -1,5 +1,6 @@
 package org.alan.contact_manager_backend.config;
 
+import org.alan.contact_manager_backend.filters.JwtAuthenticationFilter;
 import org.alan.contact_manager_backend.models.UserRoles;
 import org.alan.contact_manager_backend.services.AppUserService;
 import org.springframework.context.annotation.Bean;
@@ -24,10 +25,12 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableMethodSecurity
 public class WebSecurityConfig {
 
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final AppUserService appUserService;
     private final PasswordEncoder passwordEncoder;
 
-    public WebSecurityConfig(AppUserService appUserService, PasswordEncoder passwordEncoder) {
+    public WebSecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter, AppUserService appUserService, PasswordEncoder passwordEncoder) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
         this.appUserService = appUserService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -53,7 +56,8 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().hasAuthority(UserRoles.ROLE_USER.toString()))
                 .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 }
