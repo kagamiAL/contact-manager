@@ -1,7 +1,7 @@
 package org.alan.contact_manager_backend.services;
 
 import org.alan.contact_manager_backend.dtos.JwtAuthenticationResponse;
-import org.alan.contact_manager_backend.dtos.SignUpRequest;
+import org.alan.contact_manager_backend.dtos.AuthorizationRequest;
 import org.alan.contact_manager_backend.models.AppUser;
 import org.alan.contact_manager_backend.repositories.AppUserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,7 +25,7 @@ public class AuthenticationService {
         this.authenticationManager = authenticationManager;
     }
 
-    public JwtAuthenticationResponse signUp(SignUpRequest request) {
+    public JwtAuthenticationResponse signUp(AuthorizationRequest request) {
         AppUser appUser = new AppUser();
         appUser.setEmail(request.email());
         appUser.setPassword(passwordEncoder.encode(request.password()));

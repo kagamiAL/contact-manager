@@ -1,7 +1,7 @@
 package org.alan.contact_manager_backend.controllers;
 
 import org.alan.contact_manager_backend.dtos.JwtAuthenticationResponse;
-import org.alan.contact_manager_backend.dtos.SignUpRequest;
+import org.alan.contact_manager_backend.dtos.AuthorizationRequest;
 import org.alan.contact_manager_backend.services.AuthenticationService;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +20,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public JwtAuthenticationResponse signUp(@Validated @RequestBody SignUpRequest signUpRequest) {
-        return authenticationService.signUp(signUpRequest);
+    public JwtAuthenticationResponse signUp(@Validated @RequestBody AuthorizationRequest authorizationRequest) {
+        return authenticationService.signUp(authorizationRequest);
     }
 }
