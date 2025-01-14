@@ -5,6 +5,7 @@ import org.alan.contact_manager_backend.dtos.AuthorizationRequest;
 import org.alan.contact_manager_backend.models.AppUser;
 import org.alan.contact_manager_backend.repositories.AppUserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -31,6 +32,16 @@ public class AuthenticationService {
         appUser.setPassword(passwordEncoder.encode(request.password()));
         appUser = userService.save(appUser);
         String jwt = jwtService.generateToken(appUser);
+        return new JwtAuthenticationResponse(jwt);
+    }
+
+    public JwtAuthenticationResponse signIn(AuthorizationRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.email(), request.password())
+        );
+        AppUser user = userRepository.findByEmail(request.email())
+                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+        String jwt = jwtService.generateToken(user);
         return new JwtAuthenticationResponse(jwt);
     }
 }

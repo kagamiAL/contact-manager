@@ -23,4 +23,9 @@ public class AuthenticationController {
     public JwtAuthenticationResponse signUp(@Validated @RequestBody AuthorizationRequest authorizationRequest) {
         return authenticationService.signUp(authorizationRequest);
     }
+
+    @PostMapping("/signIn")
+    public JwtAuthenticationResponse signIn(@Validated @RequestBody AuthorizationRequest authorizationRequest) {
+        return authenticationService.signIn(authorizationRequest);
+    }
 }
