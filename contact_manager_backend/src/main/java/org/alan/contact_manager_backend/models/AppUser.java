@@ -15,6 +15,10 @@ public class AppUser implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @OneToMany(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "owner_id")
+    private List<Contact> joinColumnContacts;
+
     @Column(nullable = false, unique = true)
     private String email;
 
@@ -78,5 +82,9 @@ public class AppUser implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setJoinColumnContacts(List<Contact> joinColumnContacts) {
+        this.joinColumnContacts = joinColumnContacts;
     }
 }
