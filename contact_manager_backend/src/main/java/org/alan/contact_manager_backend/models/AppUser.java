@@ -5,6 +5,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -15,9 +16,9 @@ public class AppUser implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(cascade = CascadeType.PERSIST)
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id")
-    private List<Contact> joinColumnContacts;
+    private List<Contact> joinColumnContacts = new ArrayList<>();
 
     @Column(nullable = false, unique = true)
     private String email;
@@ -86,5 +87,9 @@ public class AppUser implements UserDetails {
 
     public void setJoinColumnContacts(List<Contact> joinColumnContacts) {
         this.joinColumnContacts = joinColumnContacts;
+    }
+
+    public List<Contact> getJoinColumnContacts(){
+        return joinColumnContacts;
     }
 }
