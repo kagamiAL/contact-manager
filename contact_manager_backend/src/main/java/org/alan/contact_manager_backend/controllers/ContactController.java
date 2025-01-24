@@ -10,11 +10,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -42,5 +40,16 @@ public class ContactController {
             appUser.getJoinColumnContacts().add(contact);
         }
         return ResponseEntity.ok().body("Added contacts successfully!");
+    }
+
+    @DeleteMapping("/delete")
+    @Transactional()
+    public ResponseEntity<?> deleteContacts(@RequestBody @Validated List<Long> contactIDs){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser appUser = appUserRepository.findByEmail(authentication.getName())
+                .orElseThrow(() -> new UsernameNotFoundException("User does not exist"));
+        HashSet<Long> set = new HashSet<>(contactIDs);
+        appUser.getJoinColumnContacts().removeIf(contact -> set.contains(contact.getId()));
+        return ResponseEntity.ok().body("Deleted contacts successfully!");
     }
 }
