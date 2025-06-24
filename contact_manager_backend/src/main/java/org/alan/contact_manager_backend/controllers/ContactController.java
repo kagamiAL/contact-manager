@@ -1,5 +1,7 @@
 package org.alan.contact_manager_backend.controllers;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.alan.contact_manager_backend.dtos.ContactBody;
 import org.alan.contact_manager_backend.models.AppUser;
 import org.alan.contact_manager_backend.models.Contact;
@@ -21,8 +23,20 @@ public class ContactController {
 
     private final AppUserRepository appUserRepository;
 
-    public ContactController(AppUserRepository appUserRepository) {
+    private final ObjectMapper objectMapper;
+
+    public ContactController(AppUserRepository appUserRepository, ObjectMapper objectMapper) {
         this.appUserRepository = appUserRepository;
+        this.objectMapper = objectMapper;
+    }
+
+    /**
+     * Simply throws a user not found error
+     *
+     * @return The error
+     */
+    private UsernameNotFoundException usernameNotFoundException() {
+        return new UsernameNotFoundException("User does not exist");
     }
 
     @PostMapping("/add")
@@ -30,7 +44,7 @@ public class ContactController {
     public ResponseEntity<?> addContacts(@RequestBody @Validated List<ContactBody> contactBodies) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = appUserRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new UsernameNotFoundException("User does not exist"));
+                .orElseThrow(this::usernameNotFoundException);
         for (ContactBody contactBody : contactBodies) {
             Contact contact = new Contact();
             contact.setFirst_name(contactBody.firstName());
@@ -48,9 +62,20 @@ public class ContactController {
     public ResponseEntity<?> deleteContacts(@RequestBody @Validated List<Long> contactIDs) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = appUserRepository.findByEmail(authentication.getName())
-                .orElseThrow(() -> new UsernameNotFoundException("User does not exist"));
+                .orElseThrow(this::usernameNotFoundException);
         HashSet<Long> set = new HashSet<>(contactIDs);
         appUser.getJoinColumnContacts().removeIf(contact -> set.contains(contact.getId()));
         return ResponseEntity.ok().body("Deleted contacts successfully!");
     }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAllContacts() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        AppUser appUser = appUserRepository.findByEmail(authentication.getName()).orElseThrow(
+                this::usernameNotFoundException);
+        ObjectNode objectNode = objectMapper.createObjectNode();
+        objectNode.set("contacts", objectMapper.valueToTree(appUser.getJoinColumnContacts()));
+        return ResponseEntity.ok().body(objectNode);
+    }
+
 }
