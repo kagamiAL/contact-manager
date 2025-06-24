@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 public class Contact {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)
@@ -56,11 +57,28 @@ public class Contact {
         this.date_of_birth = date_of_birth;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
-    public Long getId() {
-        return id;
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj instanceof Contact contact) {
+            return contact.first_name.equals(first_name) && contact.last_name.equals(last_name)
+                    && contact.zip_code.equals(zip_code) && contact.date_of_birth.equals(date_of_birth);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(first_name, last_name, zip_code, date_of_birth);
     }
 }
