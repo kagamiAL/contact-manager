@@ -27,24 +27,25 @@ public class ContactController {
 
     @PostMapping("/add")
     @Transactional()
-    public ResponseEntity<?> addContacts(@RequestBody @Validated List<ContactBody> contactBodies){
+    public ResponseEntity<?> addContacts(@RequestBody @Validated List<ContactBody> contactBodies) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = appUserRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("User does not exist"));
-        for (ContactBody contactBody: contactBodies) {
+        for (ContactBody contactBody : contactBodies) {
             Contact contact = new Contact();
             contact.setFirst_name(contactBody.firstName());
             contact.setLast_name(contactBody.lastName());
             contact.setDate_of_birth(contactBody.dateOfBirth());
             contact.setZip_code(contactBody.zipCode());
-            appUser.getJoinColumnContacts().add(contact);
+            if (!appUser.getJoinColumnContacts().contains(contact))
+                appUser.getJoinColumnContacts().add(contact);
         }
         return ResponseEntity.ok().body("Added contacts successfully!");
     }
 
     @DeleteMapping("/delete")
     @Transactional()
-    public ResponseEntity<?> deleteContacts(@RequestBody @Validated List<Long> contactIDs){
+    public ResponseEntity<?> deleteContacts(@RequestBody @Validated List<Long> contactIDs) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = appUserRepository.findByEmail(authentication.getName())
                 .orElseThrow(() -> new UsernameNotFoundException("User does not exist"));
