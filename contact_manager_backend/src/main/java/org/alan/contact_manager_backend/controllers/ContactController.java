@@ -1,6 +1,5 @@
 package org.alan.contact_manager_backend.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.alan.contact_manager_backend.dtos.ContactBody;
 import org.alan.contact_manager_backend.models.AppUser;
 import org.alan.contact_manager_backend.models.Contact;
@@ -27,12 +26,9 @@ public class ContactController {
 
     private final ContactRepository contactRepository;
 
-    private final ObjectMapper objectMapper;
-
-    public ContactController(AppUserRepository appUserRepository, ContactRepository contactRepository, ObjectMapper objectMapper) {
+    public ContactController(AppUserRepository appUserRepository, ContactRepository contactRepository) {
         this.appUserRepository = appUserRepository;
         this.contactRepository = contactRepository;
-        this.objectMapper = objectMapper;
     }
 
     /**
