@@ -1,6 +1,7 @@
 package org.alan.contact_manager_backend.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -11,6 +12,11 @@ public class Contact {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+
+    @ManyToOne()
+    @JoinColumn(name = "owner_id")
+    @JsonIgnore
+    private AppUser appUser;
 
     @Column(nullable = false)
     private String first_name;
@@ -57,14 +63,6 @@ public class Contact {
         this.date_of_birth = date_of_birth;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -80,5 +78,21 @@ public class Contact {
     @Override
     public int hashCode() {
         return Objects.hash(first_name, last_name, zip_code, date_of_birth);
+    }
+
+    public AppUser getAppUser() {
+        return appUser;
+    }
+
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
