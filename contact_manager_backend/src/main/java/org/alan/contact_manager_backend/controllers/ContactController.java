@@ -1,12 +1,14 @@
 package org.alan.contact_manager_backend.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.alan.contact_manager_backend.dtos.ContactBody;
 import org.alan.contact_manager_backend.models.AppUser;
 import org.alan.contact_manager_backend.models.Contact;
 import org.alan.contact_manager_backend.repositories.AppUserRepository;
 import org.alan.contact_manager_backend.repositories.ContactRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -51,16 +53,16 @@ public class ContactController {
         for (ContactBody contactBody : contactBodies) {
             Contact contact = new Contact();
             contact.setAppUser(appUser);
-            contact.setFirst_name(contactBody.firstName());
-            contact.setLast_name(contactBody.lastName());
-            contact.setDate_of_birth(contactBody.dateOfBirth());
-            contact.setZip_code(contactBody.zipCode());
+            contact.setFirstName(contactBody.firstName());
+            contact.setLastName(contactBody.lastName());
+            contact.setDateOfBirth(contactBody.dateOfBirth());
+            contact.setZipCode(contactBody.zipCode());
             if (contactRepository.findDuplicateContact(
                     appUser,
-                    contact.getFirst_name(),
-                    contact.getLast_name(),
-                    contact.getZip_code(),
-                    contact.getDate_of_birth()).isEmpty()) {
+                    contact.getFirstName(),
+                    contact.getLastName(),
+                    contact.getZipCode(),
+                    contact.getDateOfBirth()).isEmpty()) {
                 contactRepository.save(contact);
             }
         }
@@ -78,13 +80,18 @@ public class ContactController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<?> getAllContacts() {
+    public ResponseEntity<?> getAllContacts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "firstName") String sortBy,
+            @RequestParam(defaultValue = "true") boolean ascending
+    ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = appUserRepository.findByEmail(authentication.getName()).orElseThrow(
                 this::usernameNotFoundException);
-        ObjectNode objectNode = objectMapper.createObjectNode();
-        objectNode.set("contacts", objectMapper.valueToTree(contactRepository.findAllByAppUser(appUser)));
-        return ResponseEntity.ok().body(objectNode);
+        Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+        return ResponseEntity.ok().body(contactRepository.findAllByAppUser(appUser, pageable));
     }
 
 }
