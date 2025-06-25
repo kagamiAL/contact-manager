@@ -18,49 +18,49 @@ public class Contact {
     @JsonIgnore
     private AppUser appUser;
 
-    @Column(nullable = false)
-    private String first_name;
+    @Column(nullable = false, name = "first_name")
+    private String firstName;
 
-    @Column(nullable = false)
-    private String last_name;
+    @Column(nullable = false, name = "last_name")
+    private String lastName;
 
-    @Column(nullable = false)
-    private String zip_code;
+    @Column(nullable = false, name = "zip_code")
+    private String zipCode;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "date_of_birth")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate date_of_birth;
+    private LocalDate dateOfBirth;
 
-    public String getFirst_name() {
-        return first_name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirst_name(String first_name) {
-        this.first_name = first_name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLast_name() {
-        return last_name;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLast_name(String last_name) {
-        this.last_name = last_name;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
-    public String getZip_code() {
-        return zip_code;
+    public String getZipCode() {
+        return zipCode;
     }
 
-    public void setZip_code(String zip_code) {
-        this.zip_code = zip_code;
+    public void setZipCode(String zipCode) {
+        this.zipCode = zipCode;
     }
 
-    public LocalDate getDate_of_birth() {
-        return date_of_birth;
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
     }
 
-    public void setDate_of_birth(LocalDate date_of_birth) {
-        this.date_of_birth = date_of_birth;
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
     }
 
     @Override
@@ -69,15 +69,15 @@ public class Contact {
             return true;
         }
         if (obj instanceof Contact contact) {
-            return contact.first_name.equals(first_name) && contact.last_name.equals(last_name)
-                    && contact.zip_code.equals(zip_code) && contact.date_of_birth.equals(date_of_birth);
+            return contact.firstName.equals(firstName) && contact.lastName.equals(lastName)
+                    && contact.zipCode.equals(zipCode) && contact.dateOfBirth.equals(dateOfBirth);
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(first_name, last_name, zip_code, date_of_birth);
+        return Objects.hash(firstName, lastName, zipCode, dateOfBirth);
     }
 
     public AppUser getAppUser() {
