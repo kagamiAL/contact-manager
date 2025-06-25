@@ -6,6 +6,7 @@ import org.alan.contact_manager_backend.dtos.ContactBody;
 import org.alan.contact_manager_backend.models.AppUser;
 import org.alan.contact_manager_backend.models.Contact;
 import org.alan.contact_manager_backend.repositories.AppUserRepository;
+import org.alan.contact_manager_backend.repositories.ContactRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -23,10 +23,13 @@ public class ContactController {
 
     private final AppUserRepository appUserRepository;
 
+    private final ContactRepository contactRepository;
+
     private final ObjectMapper objectMapper;
 
-    public ContactController(AppUserRepository appUserRepository, ObjectMapper objectMapper) {
+    public ContactController(AppUserRepository appUserRepository, ContactRepository contactRepository, ObjectMapper objectMapper) {
         this.appUserRepository = appUserRepository;
+        this.contactRepository = contactRepository;
         this.objectMapper = objectMapper;
     }
 
@@ -47,12 +50,19 @@ public class ContactController {
                 .orElseThrow(this::usernameNotFoundException);
         for (ContactBody contactBody : contactBodies) {
             Contact contact = new Contact();
+            contact.setAppUser(appUser);
             contact.setFirst_name(contactBody.firstName());
             contact.setLast_name(contactBody.lastName());
             contact.setDate_of_birth(contactBody.dateOfBirth());
             contact.setZip_code(contactBody.zipCode());
-            if (!appUser.getJoinColumnContacts().contains(contact))
-                appUser.getJoinColumnContacts().add(contact);
+            if (contactRepository.findDuplicateContact(
+                    appUser,
+                    contact.getFirst_name(),
+                    contact.getLast_name(),
+                    contact.getZip_code(),
+                    contact.getDate_of_birth()).isEmpty()) {
+                contactRepository.save(contact);
+            }
         }
         return ResponseEntity.ok().body("Added contacts successfully!");
     }
@@ -63,8 +73,7 @@ public class ContactController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         AppUser appUser = appUserRepository.findByEmail(authentication.getName())
                 .orElseThrow(this::usernameNotFoundException);
-        HashSet<Long> set = new HashSet<>(contactIDs);
-        appUser.getJoinColumnContacts().removeIf(contact -> set.contains(contact.getId()));
+        contactRepository.deleteAllByAppUserAndIdIn(appUser, contactIDs);
         return ResponseEntity.ok().body("Deleted contacts successfully!");
     }
 
@@ -74,7 +83,7 @@ public class ContactController {
         AppUser appUser = appUserRepository.findByEmail(authentication.getName()).orElseThrow(
                 this::usernameNotFoundException);
         ObjectNode objectNode = objectMapper.createObjectNode();
-        objectNode.set("contacts", objectMapper.valueToTree(appUser.getJoinColumnContacts()));
+        objectNode.set("contacts", objectMapper.valueToTree(contactRepository.findAllByAppUser(appUser)));
         return ResponseEntity.ok().body(objectNode);
     }
 
