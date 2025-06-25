@@ -5,27 +5,23 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Entity
 public class AppUser implements UserDetails {
 
+    private final UserRoles role = UserRoles.ROLE_USER;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "owner_id")
-    private List<Contact> joinColumnContacts = new ArrayList<>();
 
     @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)
     private String password;
-    private final UserRoles role = UserRoles.ROLE_USER;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -57,12 +53,12 @@ public class AppUser implements UserDetails {
         return true;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public UserRoles getRole() {
@@ -83,13 +79,5 @@ public class AppUser implements UserDetails {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setJoinColumnContacts(List<Contact> joinColumnContacts) {
-        this.joinColumnContacts = joinColumnContacts;
-    }
-
-    public List<Contact> getJoinColumnContacts(){
-        return joinColumnContacts;
     }
 }
