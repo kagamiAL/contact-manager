@@ -19,6 +19,10 @@ public class Contact {
     @JsonIgnore
     private AppUser appUser;
 
+    @Column(nullable = false, name = "unique_hash")
+    @JsonIgnore
+    private String uniqueHash;
+
     @Column(nullable = false, name = "first_name")
     private String firstName;
 
@@ -75,8 +79,10 @@ public class Contact {
             return true;
         }
         if (obj instanceof Contact contact) {
-            return contact.firstName.equals(firstName) && contact.lastName.equals(lastName)
-                    && contact.zipCode.equals(zipCode) && contact.dateOfBirth.equals(dateOfBirth);
+            return contact.firstName.equals(firstName)
+                    && contact.lastName.equals(lastName)
+                    && contact.zipCode.equals(zipCode)
+                    && contact.dateOfBirth.equals(dateOfBirth);
         }
         return false;
     }
@@ -95,5 +101,13 @@ public class Contact {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUniqueHash() {
+        return uniqueHash;
+    }
+
+    public void setUniqueHash(String uniqueHash) {
+        this.uniqueHash = uniqueHash;
     }
 }
