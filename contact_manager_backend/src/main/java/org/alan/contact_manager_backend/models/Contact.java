@@ -10,7 +10,8 @@ import java.util.Objects;
 @Entity
 public class Contact {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "contact_seq_gen", sequenceName = "CONTACT_SEQ")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "contact_seq_gen")
     private Long id;
 
     @ManyToOne()
@@ -64,6 +65,11 @@ public class Contact {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, zipCode, dateOfBirth);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
@@ -73,11 +79,6 @@ public class Contact {
                     && contact.zipCode.equals(zipCode) && contact.dateOfBirth.equals(dateOfBirth);
         }
         return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(firstName, lastName, zipCode, dateOfBirth);
     }
 
     public AppUser getAppUser() {

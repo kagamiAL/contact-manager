@@ -14,7 +14,8 @@ public class AppUser implements UserDetails {
     private final UserRoles role = UserRoles.ROLE_USER;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name="app_user_seq_gen", sequenceName="APP_USER_SEQ")
+    @GeneratedValue(strategy=GenerationType.AUTO, generator="app_user_seq_gen")
     private Long id;
 
     @Column(nullable = false, unique = true)
