@@ -8,6 +8,12 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
+@Table(
+        name = "contact",
+        uniqueConstraints =
+                @UniqueConstraint(
+                        name = "unique_contact_per_user",
+                        columnNames = {"owner_id", "first_name", "last_name", "zip_code", "date_of_birth"}))
 public class Contact {
     @Id
     @SequenceGenerator(name = "contact_seq_gen", sequenceName = "CONTACT_SEQ")
