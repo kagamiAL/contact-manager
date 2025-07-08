@@ -1,7 +1,9 @@
 package org.alan.contact_manager_backend.controllers;
 
 import org.alan.contact_manager_backend.dtos.ContactBody;
+import org.alan.contact_manager_backend.dtos.EditContactBody;
 import org.alan.contact_manager_backend.models.AppUser;
+import org.alan.contact_manager_backend.services.AppUserService;
 import org.alan.contact_manager_backend.services.AuthenticationService;
 import org.alan.contact_manager_backend.services.ContactService;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +20,13 @@ public class ContactController {
     private final AuthenticationService authenticationService;
 
     private final ContactService contactService;
+    private final AppUserService appUserService;
 
-    public ContactController(AuthenticationService authenticationService, ContactService contactService) {
+    public ContactController(
+            AuthenticationService authenticationService, ContactService contactService, AppUserService appUserService) {
         this.authenticationService = authenticationService;
         this.contactService = contactService;
+        this.appUserService = appUserService;
     }
 
     @PostMapping("/add")
@@ -48,5 +53,13 @@ public class ContactController {
             @RequestParam(defaultValue = "true") boolean ascending) {
         AppUser appUser = authenticationService.getCurrentAppUser();
         return ResponseEntity.ok().body(contactService.getAll(appUser, page, size, sortBy, ascending));
+    }
+
+    @PostMapping("/update")
+    @Transactional()
+    public ResponseEntity<?> updateContacts(@RequestBody @Validated List<EditContactBody> editContactBodies) {
+        AppUser appUser = authenticationService.getCurrentAppUser();
+        contactService.editContactsByIDs(appUser, editContactBodies);
+        return ResponseEntity.ok().body("Updated contacts successfully!");
     }
 }

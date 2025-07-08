@@ -1,6 +1,7 @@
 package org.alan.contact_manager_backend.services;
 
 import org.alan.contact_manager_backend.dtos.ContactBody;
+import org.alan.contact_manager_backend.dtos.EditContactBody;
 import org.alan.contact_manager_backend.dtos.PageResult;
 import org.alan.contact_manager_backend.models.AppUser;
 import org.alan.contact_manager_backend.models.Contact;
@@ -147,5 +148,15 @@ public class ContactService {
                 contactPage.getSize(),
                 contactPage.getTotalElements(),
                 contactPage.getTotalPages());
+    }
+
+    /**
+     * Edits and updates the contacts with specified IDs
+     * @param appUser The App User that the contacts belong to
+     * @param editContactBodies A list of data specifying what to update and with which IDs
+     */
+    public void editContactsByIDs(AppUser appUser, List<EditContactBody> editContactBodies) {
+        Collection<Contact> contacts = contactRepository.findAllByAppUserAndIdIn(
+                appUser, editContactBodies.stream().map(EditContactBody::Id).toList());
     }
 }

@@ -14,4 +14,6 @@ public interface ContactRepository extends JpaRepository<Contact, Long> {
     Page<Contact> findAllByAppUser(AppUser appUser, Pageable pageable);
 
     Collection<Contact> findAllByAppUserAndUniqueHashIn(AppUser appUser, Collection<String> uniqueHashes);
+
+    Collection<Contact> findAllByAppUserAndIdIn(AppUser appUser, Collection<Long> ids);
 }
