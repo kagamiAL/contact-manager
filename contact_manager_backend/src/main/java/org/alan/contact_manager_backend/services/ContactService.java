@@ -17,6 +17,7 @@ import java.security.NoSuchAlgorithmException;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -103,6 +104,19 @@ public class ContactService {
     }
 
     /**
+     * Updates a Contact based on the passed EditContactBody DTO
+     * @param contact the Contact to update
+     * @param editContactBody the EditContactBody to base the update on
+     */
+    private void updateContactWithEditContactBody(Contact contact, EditContactBody editContactBody) {
+        assert contact != null;
+        editContactBody.firstName().ifPresent(contact::setFirstName);
+        editContactBody.lastName().ifPresent(contact::setLastName);
+        editContactBody.zipCode().ifPresent(contact::setZipCode);
+        editContactBody.dateOfBirth().ifPresent(contact::setDateOfBirth);
+    }
+
+    /**
      * Saves all Contact Bodies into Contacts in the ContactRepository
      * @param appUser the AppUser to save to
      * @param contactBodies the Contact Bodies
@@ -156,7 +170,15 @@ public class ContactService {
      * @param editContactBodies A list of data specifying what to update and with which IDs
      */
     public void editContactsByIDs(AppUser appUser, List<EditContactBody> editContactBodies) {
-        Collection<Contact> contacts = contactRepository.findAllByAppUserAndIdIn(
-                appUser, editContactBodies.stream().map(EditContactBody::Id).toList());
+        List<Long> filterIds =
+                editContactBodies.stream().map(EditContactBody::Id).toList();
+        Map<Long, Contact> contactMap = contactRepository.findAllByAppUserAndIdIn(appUser, filterIds).stream()
+                .collect(Collectors.toMap(Contact::getId, contact -> contact));
+        for (EditContactBody contactBody : editContactBodies) {
+            if (!contactMap.containsKey(contactBody.Id())) {
+                continue;
+            }
+            updateContactWithEditContactBody(contactMap.get(contactBody.Id()), contactBody);
+        }
     }
 }

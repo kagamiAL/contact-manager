@@ -3,7 +3,6 @@ package org.alan.contact_manager_backend.controllers;
 import org.alan.contact_manager_backend.dtos.ContactBody;
 import org.alan.contact_manager_backend.dtos.EditContactBody;
 import org.alan.contact_manager_backend.models.AppUser;
-import org.alan.contact_manager_backend.services.AppUserService;
 import org.alan.contact_manager_backend.services.AuthenticationService;
 import org.alan.contact_manager_backend.services.ContactService;
 import org.springframework.http.ResponseEntity;
@@ -20,13 +19,10 @@ public class ContactController {
     private final AuthenticationService authenticationService;
 
     private final ContactService contactService;
-    private final AppUserService appUserService;
 
-    public ContactController(
-            AuthenticationService authenticationService, ContactService contactService, AppUserService appUserService) {
+    public ContactController(AuthenticationService authenticationService, ContactService contactService) {
         this.authenticationService = authenticationService;
         this.contactService = contactService;
-        this.appUserService = appUserService;
     }
 
     @PostMapping("/add")
