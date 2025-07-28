@@ -53,7 +53,7 @@ public class ContactController {
                 .body(contactService.getAll(appUser, new PageableParams(page, size, sortBy, ascending)));
     }
 
-    @GetMapping("/search-firstname")
+    @GetMapping("/searchFirstName")
     public ResponseEntity<?> getAllContactsMatchingFirstName(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -66,7 +66,7 @@ public class ContactController {
                 .body(contactService.findContactsByMatchingFirstName(appUser, search, pageableParams));
     }
 
-    @GetMapping("/search-lastname")
+    @GetMapping("/searchLastName")
     public ResponseEntity<?> getAllContactsMatchingLastName(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -78,7 +78,7 @@ public class ContactController {
         return ResponseEntity.ok().body(contactService.findContactsByMatchingLastName(appUser, search, pageableParams));
     }
 
-    @GetMapping("/search-fullname")
+    @GetMapping("/searchFullName")
     public ResponseEntity<?> getAllContactsMatchingFullName(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
