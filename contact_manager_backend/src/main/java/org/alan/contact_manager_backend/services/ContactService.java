@@ -195,4 +195,50 @@ public class ContactService {
             updateContactWithEditContactBody(contactMap.get(contactBody.Id()), contactBody);
         }
     }
+
+    /**
+     * Finds all contacts belonging to the AppUser that matches the first name provided
+     * @param appUser the App user the contacts belong to
+     * @param firstName the first name to match
+     * @param pageableParams the PageableParams
+     * @return a PageResult of matching contacts
+     */
+    public PageResult<Contact> findContactsByMatchingFirstName(
+            AppUser appUser, String firstName, PageableParams pageableParams) {
+        Page<Contact> contactPage = contactRepository.findByAppUserAndFirstNameIgnoreCaseStartingWith(
+                appUser, firstName, getPageableFromPageableParams(pageableParams));
+        return getPageResultFromContactPage(contactPage);
+    }
+
+    /**
+     * Finds all contacts belonging to the AppUser that matches the last name provided
+     * @param appUser the App user the contacts belong to
+     * @param lastName the last name to match
+     * @param pageableParams the PageableParams
+     * @return a PageResult of matching contacts
+     */
+    public PageResult<Contact> findContactsByMatchingLastName(
+            AppUser appUser, String lastName, PageableParams pageableParams) {
+        Page<Contact> contactPage = contactRepository.findByAppUserAndLastNameIgnoreCaseStartingWith(
+                appUser, lastName, getPageableFromPageableParams(pageableParams));
+        return getPageResultFromContactPage(contactPage);
+    }
+
+    /**
+     * Finds all contacts belonging to the AppUser that matches the firstname and lastname provided
+     * @param appUser the App user the contacts belong to
+     * @param fullName the full name to match
+     * @param pageableParams the PageableParams
+     * @return a PageResult of matching contacts
+     */
+    public PageResult<Contact> findContactsByMatchingFullName(
+            AppUser appUser, String fullName, PageableParams pageableParams) {
+        String[] splitted = fullName.split("\\s+");
+        if (splitted.length < 2) {
+            return findContactsByMatchingFirstName(appUser, splitted[0], pageableParams);
+        }
+        Page<Contact> contactPage = contactRepository.searchContactsByAppUserAndFullName(
+                appUser, splitted[0], splitted[1], getPageableFromPageableParams(pageableParams));
+        return getPageResultFromContactPage(contactPage);
+    }
 }

@@ -53,6 +53,43 @@ public class ContactController {
                 .body(contactService.getAll(appUser, new PageableParams(page, size, sortBy, ascending)));
     }
 
+    @GetMapping("/search-firstname")
+    public ResponseEntity<?> getAllContactsMatchingFirstName(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "firstName") String sortBy,
+            @RequestParam(defaultValue = "true") boolean ascending,
+            @RequestParam() String search) {
+        AppUser appUser = authenticationService.getCurrentAppUser();
+        PageableParams pageableParams = new PageableParams(page, size, sortBy, ascending);
+        return ResponseEntity.ok()
+                .body(contactService.findContactsByMatchingFirstName(appUser, search, pageableParams));
+    }
+
+    @GetMapping("/search-lastname")
+    public ResponseEntity<?> getAllContactsMatchingLastName(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "firstName") String sortBy,
+            @RequestParam(defaultValue = "true") boolean ascending,
+            @RequestParam() String search) {
+        AppUser appUser = authenticationService.getCurrentAppUser();
+        PageableParams pageableParams = new PageableParams(page, size, sortBy, ascending);
+        return ResponseEntity.ok().body(contactService.findContactsByMatchingLastName(appUser, search, pageableParams));
+    }
+
+    @GetMapping("/search-fullname")
+    public ResponseEntity<?> getAllContactsMatchingFullName(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "firstName") String sortBy,
+            @RequestParam(defaultValue = "true") boolean ascending,
+            @RequestParam() String search) {
+        AppUser appUser = authenticationService.getCurrentAppUser();
+        PageableParams pageableParams = new PageableParams(page, size, sortBy, ascending);
+        return ResponseEntity.ok().body(contactService.findContactsByMatchingFullName(appUser, search, pageableParams));
+    }
+
     @PostMapping("/update")
     @Transactional()
     public ResponseEntity<?> updateContacts(@RequestBody @Validated List<EditContactBody> editContactBodies) {
