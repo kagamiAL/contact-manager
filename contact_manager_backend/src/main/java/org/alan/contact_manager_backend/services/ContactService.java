@@ -3,6 +3,7 @@ package org.alan.contact_manager_backend.services;
 import org.alan.contact_manager_backend.dtos.ContactBody;
 import org.alan.contact_manager_backend.dtos.EditContactBody;
 import org.alan.contact_manager_backend.dtos.PageResult;
+import org.alan.contact_manager_backend.dtos.PageableParams;
 import org.alan.contact_manager_backend.models.AppUser;
 import org.alan.contact_manager_backend.models.Contact;
 import org.alan.contact_manager_backend.repositories.ContactRepository;
@@ -28,6 +29,28 @@ public class ContactService {
 
     public ContactService(ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
+    }
+
+    /**
+     * Creates a PageResult DTO from a Page of contacts
+     * @param page the page of contacts
+     * @return the resulting PageResult DTO
+     */
+    private PageResult<Contact> getPageResultFromContactPage(Page<Contact> page) {
+        return new PageResult<>(
+                page.getContent(), page.getNumber(), page.getSize(), page.getTotalElements(), page.getTotalPages());
+    }
+
+    /**
+     * Creates a Pageable from PageableParams, TODO: May be moved somewhere else because this method doesn't really belong here
+     * @param pageableParams the PageableParams DTO to create the Pageable out of
+     * @return the resulting Pageable object
+     */
+    private Pageable getPageableFromPageableParams(PageableParams pageableParams) {
+        Sort sort = pageableParams.ascending()
+                ? Sort.by(pageableParams.sortBy()).ascending()
+                : Sort.by(pageableParams.sortBy()).descending();
+        return PageRequest.of(pageableParams.page(), pageableParams.size(), sort);
     }
 
     /**
@@ -146,22 +169,13 @@ public class ContactService {
     /**
      * Gets all the contacts into a page with parameters
      * @param appUser the App User
-     * @param page the current page number
-     * @param size the size of each page
-     * @param sortBy sort by what column
-     * @param ascending ascending or descending
+     * @param pageableParams the PageableParams to use for Pageable parameters
      * @return a PageResult of the query
      */
-    public PageResult<Contact> getAll(AppUser appUser, int page, int size, String sortBy, boolean ascending) {
-        Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(page, size, sort);
-        Page<Contact> contactPage = contactRepository.findAllByAppUser(appUser, pageable);
-        return new PageResult<>(
-                contactPage.getContent(),
-                contactPage.getNumber(),
-                contactPage.getSize(),
-                contactPage.getTotalElements(),
-                contactPage.getTotalPages());
+    public PageResult<Contact> getAll(AppUser appUser, PageableParams pageableParams) {
+        Page<Contact> contactPage =
+                contactRepository.findAllByAppUser(appUser, getPageableFromPageableParams(pageableParams));
+        return getPageResultFromContactPage(contactPage);
     }
 
     /**

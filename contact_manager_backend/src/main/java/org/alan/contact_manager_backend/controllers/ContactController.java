@@ -2,6 +2,7 @@ package org.alan.contact_manager_backend.controllers;
 
 import org.alan.contact_manager_backend.dtos.ContactBody;
 import org.alan.contact_manager_backend.dtos.EditContactBody;
+import org.alan.contact_manager_backend.dtos.PageableParams;
 import org.alan.contact_manager_backend.models.AppUser;
 import org.alan.contact_manager_backend.services.AuthenticationService;
 import org.alan.contact_manager_backend.services.ContactService;
@@ -48,7 +49,8 @@ public class ContactController {
             @RequestParam(defaultValue = "firstName") String sortBy,
             @RequestParam(defaultValue = "true") boolean ascending) {
         AppUser appUser = authenticationService.getCurrentAppUser();
-        return ResponseEntity.ok().body(contactService.getAll(appUser, page, size, sortBy, ascending));
+        return ResponseEntity.ok()
+                .body(contactService.getAll(appUser, new PageableParams(page, size, sortBy, ascending)));
     }
 
     @PostMapping("/update")
