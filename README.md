@@ -52,7 +52,7 @@ TOKEN_SECRET_KEY=VmrOyyLnVSmgrBgBAfPXKebWYeigBoxbvzCRlhPVddYmeLDoVr
 
 #### 2.b. Frontend (`contact-manager-frontend/.env`)
 
-You can **optionally** create a `.env` file in the `contact_manager_frontend` directory if you want to change the API URL (for example, if your backend is not running on localhost):
+You can **optionally** create a `.env` file in the `contact-manager-frontend` directory if you want to change the API URL (for example, if your backend is not running on localhost):
 
 ```
 NEXT_PUBLIC_API_URL=https://localhost:8080
