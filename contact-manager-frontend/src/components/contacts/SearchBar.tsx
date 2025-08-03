@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Button from "@/components/ui/Button";
 import type { SearchType } from "@/lib/types";
 
@@ -18,6 +18,20 @@ export default function SearchBar({
   const [query, setQuery] = useState("");
   const [searchType, setSearchType] = useState<SearchType>("firstName");
   const [showFilters, setShowFilters] = useState(false);
+
+  // Debounced search effect
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (query.trim()) {
+        onSearch(query.trim(), searchType);
+      } else {
+        // If search is empty, fetch all contacts
+        onClear();
+      }
+    }, 200); // 200ms delay for more responsive feel
+
+    return () => clearTimeout(timeoutId);
+  }, [query, searchType, onSearch, onClear]);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,14 +71,6 @@ export default function SearchBar({
               className="text-xs"
             >
               {showFilters ? "hide filters" : "filters"}
-            </Button>
-            <Button
-              type="submit"
-              variant="ghost"
-              className="text-xs"
-              disabled={isLoading}
-            >
-              search
             </Button>
             <Button
               type="button"
