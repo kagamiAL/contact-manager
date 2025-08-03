@@ -8,15 +8,26 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 @Entity
+@Table(
+        name = "contact",
+        uniqueConstraints =
+                @UniqueConstraint(
+                        name = "unique_contact_per_user",
+                        columnNames = {"owner_id", "first_name", "last_name", "zip_code", "date_of_birth"}))
 public class Contact {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "contact_seq_gen", sequenceName = "CONTACT_SEQ")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "contact_seq_gen")
     private Long id;
 
     @ManyToOne()
     @JoinColumn(name = "owner_id")
     @JsonIgnore
     private AppUser appUser;
+
+    @Column(nullable = false, name = "unique_hash")
+    @JsonIgnore
+    private String uniqueHash;
 
     @Column(nullable = false, name = "first_name")
     private String firstName;
@@ -64,20 +75,22 @@ public class Contact {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(firstName, lastName, zipCode, dateOfBirth);
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (this == obj) {
             return true;
         }
         if (obj instanceof Contact contact) {
-            return contact.firstName.equals(firstName) && contact.lastName.equals(lastName)
-                    && contact.zipCode.equals(zipCode) && contact.dateOfBirth.equals(dateOfBirth);
+            return contact.firstName.equals(firstName)
+                    && contact.lastName.equals(lastName)
+                    && contact.zipCode.equals(zipCode)
+                    && contact.dateOfBirth.equals(dateOfBirth);
         }
         return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(firstName, lastName, zipCode, dateOfBirth);
     }
 
     public AppUser getAppUser() {
@@ -94,5 +107,13 @@ public class Contact {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getUniqueHash() {
+        return uniqueHash;
+    }
+
+    public void setUniqueHash(String uniqueHash) {
+        this.uniqueHash = uniqueHash;
     }
 }

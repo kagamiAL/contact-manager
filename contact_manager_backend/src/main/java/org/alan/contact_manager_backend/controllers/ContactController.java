@@ -1,17 +1,12 @@
 package org.alan.contact_manager_backend.controllers;
 
 import org.alan.contact_manager_backend.dtos.ContactBody;
+import org.alan.contact_manager_backend.dtos.EditContactBody;
+import org.alan.contact_manager_backend.dtos.PageableParams;
 import org.alan.contact_manager_backend.models.AppUser;
-import org.alan.contact_manager_backend.models.Contact;
-import org.alan.contact_manager_backend.repositories.AppUserRepository;
-import org.alan.contact_manager_backend.repositories.ContactRepository;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.alan.contact_manager_backend.services.AuthenticationService;
+import org.alan.contact_manager_backend.services.ContactService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -22,56 +17,28 @@ import java.util.List;
 @RequestMapping("/api/contacts")
 public class ContactController {
 
-    private final AppUserRepository appUserRepository;
+    private final AuthenticationService authenticationService;
 
-    private final ContactRepository contactRepository;
+    private final ContactService contactService;
 
-    public ContactController(AppUserRepository appUserRepository, ContactRepository contactRepository) {
-        this.appUserRepository = appUserRepository;
-        this.contactRepository = contactRepository;
-    }
-
-    /**
-     * Simply throws a user not found error
-     *
-     * @return The error
-     */
-    private UsernameNotFoundException usernameNotFoundException() {
-        return new UsernameNotFoundException("User does not exist");
+    public ContactController(AuthenticationService authenticationService, ContactService contactService) {
+        this.authenticationService = authenticationService;
+        this.contactService = contactService;
     }
 
     @PostMapping("/add")
     @Transactional()
     public ResponseEntity<?> addContacts(@RequestBody @Validated List<ContactBody> contactBodies) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AppUser appUser = appUserRepository.findByEmail(authentication.getName())
-                .orElseThrow(this::usernameNotFoundException);
-        for (ContactBody contactBody : contactBodies) {
-            Contact contact = new Contact();
-            contact.setAppUser(appUser);
-            contact.setFirstName(contactBody.firstName());
-            contact.setLastName(contactBody.lastName());
-            contact.setDateOfBirth(contactBody.dateOfBirth());
-            contact.setZipCode(contactBody.zipCode());
-            if (contactRepository.findDuplicateContact(
-                    appUser,
-                    contact.getFirstName(),
-                    contact.getLastName(),
-                    contact.getZipCode(),
-                    contact.getDateOfBirth()).isEmpty()) {
-                contactRepository.save(contact);
-            }
-        }
+        AppUser appUser = authenticationService.getCurrentAppUser();
+        contactService.saveAllContactBodies(appUser, contactBodies);
         return ResponseEntity.ok().body("Added contacts successfully!");
     }
 
     @DeleteMapping("/delete")
     @Transactional()
     public ResponseEntity<?> deleteContacts(@RequestBody @Validated List<Long> contactIDs) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AppUser appUser = appUserRepository.findByEmail(authentication.getName())
-                .orElseThrow(this::usernameNotFoundException);
-        contactRepository.deleteAllByAppUserAndIdIn(appUser, contactIDs);
+        AppUser appUser = authenticationService.getCurrentAppUser();
+        contactService.deleteContactsByIDs(appUser, contactIDs);
         return ResponseEntity.ok().body("Deleted contacts successfully!");
     }
 
@@ -80,14 +47,54 @@ public class ContactController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(defaultValue = "firstName") String sortBy,
-            @RequestParam(defaultValue = "true") boolean ascending
-    ) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        AppUser appUser = appUserRepository.findByEmail(authentication.getName()).orElseThrow(
-                this::usernameNotFoundException);
-        Sort sort = ascending ? Sort.by(sortBy).ascending() : Sort.by(sortBy).descending();
-        Pageable pageable = PageRequest.of(page, size, sort);
-        return ResponseEntity.ok().body(contactRepository.findAllByAppUser(appUser, pageable));
+            @RequestParam(defaultValue = "true") boolean ascending) {
+        AppUser appUser = authenticationService.getCurrentAppUser();
+        return ResponseEntity.ok()
+                .body(contactService.getAll(appUser, new PageableParams(page, size, sortBy, ascending)));
     }
 
+    @GetMapping("/searchFirstName")
+    public ResponseEntity<?> getAllContactsMatchingFirstName(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "firstName") String sortBy,
+            @RequestParam(defaultValue = "true") boolean ascending,
+            @RequestParam() String search) {
+        AppUser appUser = authenticationService.getCurrentAppUser();
+        PageableParams pageableParams = new PageableParams(page, size, sortBy, ascending);
+        return ResponseEntity.ok()
+                .body(contactService.findContactsByMatchingFirstName(appUser, search, pageableParams));
+    }
+
+    @GetMapping("/searchLastName")
+    public ResponseEntity<?> getAllContactsMatchingLastName(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "firstName") String sortBy,
+            @RequestParam(defaultValue = "true") boolean ascending,
+            @RequestParam() String search) {
+        AppUser appUser = authenticationService.getCurrentAppUser();
+        PageableParams pageableParams = new PageableParams(page, size, sortBy, ascending);
+        return ResponseEntity.ok().body(contactService.findContactsByMatchingLastName(appUser, search, pageableParams));
+    }
+
+    @GetMapping("/searchFullName")
+    public ResponseEntity<?> getAllContactsMatchingFullName(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "firstName") String sortBy,
+            @RequestParam(defaultValue = "true") boolean ascending,
+            @RequestParam() String search) {
+        AppUser appUser = authenticationService.getCurrentAppUser();
+        PageableParams pageableParams = new PageableParams(page, size, sortBy, ascending);
+        return ResponseEntity.ok().body(contactService.findContactsByMatchingFullName(appUser, search, pageableParams));
+    }
+
+    @PostMapping("/update")
+    @Transactional()
+    public ResponseEntity<?> updateContacts(@RequestBody @Validated List<EditContactBody> editContactBodies) {
+        AppUser appUser = authenticationService.getCurrentAppUser();
+        contactService.editContactsByIDs(appUser, editContactBodies);
+        return ResponseEntity.ok().body("Updated contacts successfully!");
+    }
 }
