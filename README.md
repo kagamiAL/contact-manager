@@ -47,15 +47,15 @@ cd contact-manager
   `contact_manager_backend/src/main/resources/application.properties`
 
 ```bash
-cd contact_manager_frontend
 # Run backend (from backend directory)
+cd contact_manager_backend
 ./mvnw spring-boot:run
 ```
 
 ### 3. Frontend setup
 
 ```bash
-cd contact_manager_frontend
+cd contact-manager-frontend
 npm install
 npm run dev
 ```
