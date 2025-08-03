@@ -1,6 +1,7 @@
 "use client";
 
 import { useForm } from "react-hook-form";
+import { useEffect } from "react";
 import { X } from "lucide-react";
 import { ContactBody, EditContactBody, Contact } from "@/lib/types";
 import Input from "@/components/ui/Input";
@@ -32,8 +33,32 @@ export default function ContactForm({
           zipCode: contact.zipCode,
           dateOfBirth: contact.dateOfBirth,
         }
-      : undefined,
+      : {
+          firstName: "",
+          lastName: "",
+          zipCode: "",
+          dateOfBirth: "",
+        },
   });
+
+  // Update form values when contact changes (for editing)
+  useEffect(() => {
+    if (contact) {
+      reset({
+        firstName: contact.firstName,
+        lastName: contact.lastName,
+        zipCode: contact.zipCode,
+        dateOfBirth: contact.dateOfBirth,
+      });
+    } else {
+      reset({
+        firstName: "",
+        lastName: "",
+        zipCode: "",
+        dateOfBirth: "",
+      });
+    }
+  }, [contact, reset]);
 
   const handleFormSubmit = async (data: ContactBody) => {
     try {
@@ -52,7 +77,6 @@ export default function ContactForm({
         await onSubmit(data);
       }
 
-      reset();
       onClose();
     } catch (error) {
       // Error is handled in parent component
