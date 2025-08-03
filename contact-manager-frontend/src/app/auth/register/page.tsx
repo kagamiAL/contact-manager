@@ -7,15 +7,15 @@ import RegisterForm from "../components/RegisterForm";
 export default function RegisterPage() {
   return (
     <AuthLayout
-      title="Create your account"
+      title="join us"
       subtitle={
         <>
-          Or{" "}
+          or{" "}
           <Link
             href="/auth/login"
-            className="font-medium text-white hover:text-gray-300"
+            className="text-white border-b border-white/40 hover:border-white transition-colors duration-300"
           >
-            sign in to your existing account
+            sign in
           </Link>
         </>
       }

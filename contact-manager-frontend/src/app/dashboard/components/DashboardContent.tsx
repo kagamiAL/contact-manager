@@ -47,35 +47,27 @@ export default function DashboardContent() {
   }
 
   return (
-    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <main className="max-w-4xl mx-auto px-8 py-12">
       <ContactsHeader onAddContact={handleAddContact} />
 
-      {/* Search Bar */}
-      <div className="mb-6">
-        <SearchBar
-          onSearch={handleSearch}
-          onClear={handleClearSearch}
-          isLoading={isLoading}
-        />
-      </div>
+      <SearchBar
+        onSearch={handleSearch}
+        onClear={handleClearSearch}
+        isLoading={isLoading}
+      />
 
-      {/* Stats */}
       <ContactsStats totalContacts={contacts.totalElements} />
 
-      {/* Contacts List */}
-      <div className="space-y-6">
-        <ContactsList
-          contacts={contacts}
-          isLoading={isLoading}
-          searchQuery={searchQuery}
-          onEditContact={handleEditContact}
-          onDeleteContact={handleDeleteContact}
-          onPageChange={handlePageChange}
-          onAddContact={handleAddContact}
-        />
-      </div>
+      <ContactsList
+        contacts={contacts}
+        isLoading={isLoading}
+        searchQuery={searchQuery}
+        onEditContact={handleEditContact}
+        onDeleteContact={handleDeleteContact}
+        onPageChange={handlePageChange}
+        onAddContact={handleAddContact}
+      />
 
-      {/* Contact Form Modal */}
       <ContactForm
         contact={editingContact}
         isOpen={isFormOpen}

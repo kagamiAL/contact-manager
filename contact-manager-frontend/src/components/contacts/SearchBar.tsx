@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Filter } from "lucide-react";
 import Button from "@/components/ui/Button";
-import Input from "@/components/ui/Input";
 import type { SearchType } from "@/lib/types";
 
 interface SearchBarProps {
@@ -40,58 +38,65 @@ export default function SearchBar({
   };
 
   return (
-    <div className="space-y-4">
-      <form onSubmit={handleSearch} className="flex space-x-2">
-        <div className="flex-1 relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search contacts..."
-            className="w-full pl-10 pr-4 py-2 border border-gray-600 rounded-md bg-gray-900 text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-white focus:border-transparent"
-          />
-        </div>
-
-        <Button
-          type="button"
-          variant="secondary"
-          onClick={() => setShowFilters(!showFilters)}
-          className="px-3"
-        >
-          <Filter className="h-4 w-4" />
-        </Button>
-
-        <Button type="submit" disabled={!query.trim() || isLoading}>
-          Search
-        </Button>
+    <div className="mb-12">
+      <form onSubmit={handleSearch} className="relative">
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="search people..."
+          className="w-full bg-transparent border-b border-white/20 py-4 text-white placeholder:text-white/30 focus:outline-none focus:border-white focus:placeholder:text-white/50 transition-all duration-500 transform focus:scale-[1.02]"
+        />
 
         {query && (
-          <Button type="button" variant="ghost" onClick={handleClear}>
-            Clear
-          </Button>
+          <div className="flex items-center space-x-4 mt-4 animate-in slide-in-from-top duration-300">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => setShowFilters(!showFilters)}
+              className="text-xs"
+            >
+              {showFilters ? "hide filters" : "filters"}
+            </Button>
+            <Button
+              type="submit"
+              variant="ghost"
+              className="text-xs"
+              disabled={isLoading}
+            >
+              search
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={handleClear}
+              className="text-xs"
+            >
+              clear
+            </Button>
+          </div>
         )}
       </form>
 
       {showFilters && (
-        <div className="bg-gray-800 rounded-lg p-4 border border-gray-700">
-          <h4 className="text-sm font-medium text-white mb-3">Search by:</h4>
-          <div className="grid grid-cols-3 gap-2">
-            {(Object.keys(searchTypeLabels) as SearchType[]).map((type) => (
+        <div className="mt-6 flex space-x-4 animate-in slide-in-from-top duration-400">
+          {(Object.keys(searchTypeLabels) as SearchType[]).map(
+            (type, index) => (
               <button
                 key={type}
                 type="button"
                 onClick={() => setSearchType(type)}
-                className={`px-3 py-2 text-sm rounded-md transition-colors ${
+                className={`text-xs font-light transition-all duration-300 transform hover:scale-105 ${
                   searchType === type
-                    ? "bg-white text-black"
-                    : "bg-gray-700 text-gray-300 hover:bg-gray-600 border border-gray-600"
+                    ? "text-white border-b border-white"
+                    : "text-white/40 hover:text-white/60"
                 }`}
+                style={{ animationDelay: `${index * 100}ms` }}
               >
-                {searchTypeLabels[type]}
+                {searchTypeLabels[type].toLowerCase()}
               </button>
-            ))}
-          </div>
+            )
+          )}
         </div>
       )}
     </div>

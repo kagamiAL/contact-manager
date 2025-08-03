@@ -29,57 +29,46 @@ export default function ContactCard({
   };
 
   return (
-    <div className="bg-gray-900 rounded-lg shadow-sm border border-gray-800 p-6 hover:shadow-md transition-shadow">
-      <div className="flex items-start justify-between">
-        <div className="flex items-start space-x-4">
+    <div className="group py-6 border-b border-white/10 hover:border-white/20 transition-all duration-500 animate-in fade-in slide-in-from-bottom-4">
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-6">
           {/* Avatar */}
-          <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center text-black font-semibold">
-            {getInitials(contact.firstName, contact.lastName)}
-          </div>
+          <div className="w-3 h-3 bg-white rounded-full opacity-60 group-hover:opacity-100 group-hover:scale-125 transition-all duration-300" />
 
           {/* Contact Info */}
           <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-semibold text-white truncate">
+            <h3 className="text-xl font-light text-white mb-1 group-hover:text-white/90 transition-colors duration-300">
               {contact.firstName} {contact.lastName}
             </h3>
-
-            <div className="mt-2 space-y-1">
-              <div className="flex items-center text-sm text-gray-300">
-                <MapPin className="h-4 w-4 mr-2 text-gray-400" />
-                <span>Zip Code: {contact.zipCode}</span>
-              </div>
-
-              <div className="flex items-center text-sm text-gray-300">
-                <Calendar className="h-4 w-4 mr-2 text-gray-400" />
-                <span>
-                  {formatDateOfBirth(contact.dateOfBirth)} (Age:{" "}
-                  {calculateAge(contact.dateOfBirth)})
-                </span>
-              </div>
+            <div className="flex items-center space-x-6 text-sm text-white/40 group-hover:text-white/60 transition-colors duration-300">
+              <span className="transform group-hover:translate-x-1 transition-transform duration-300">
+                {contact.zipCode}
+              </span>
+              <span className="transform group-hover:translate-x-1 transition-transform duration-300 delay-75">
+                age {calculateAge(contact.dateOfBirth)}
+              </span>
             </div>
           </div>
         </div>
 
         {/* Actions */}
-        <div className="flex items-center space-x-2 ml-4">
+        <div className="flex items-center space-x-6 opacity-0 group-hover:opacity-100 transition-all duration-500">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => onEdit(contact)}
-            className="p-2 text-white hover:bg-gray-800"
+            className="p-0 h-auto transform hover:scale-105 transition-transform duration-200"
           >
-            <Edit className="h-4 w-4" />
+            edit
           </Button>
 
-          <Button
-            variant="ghost"
-            size="sm"
+          <button
             onClick={handleDelete}
-            loading={isDeleting}
-            className="p-2 text-red-400 hover:text-red-300 hover:bg-red-900/20"
+            disabled={isDeleting}
+            className="text-white/30 hover:text-white/60 text-xs transition-all duration-300 transform hover:scale-105 disabled:opacity-50"
           >
-            <Trash2 className="h-4 w-4" />
-          </Button>
+            {isDeleting ? "..." : "×"}
+          </button>
         </div>
       </div>
     </div>

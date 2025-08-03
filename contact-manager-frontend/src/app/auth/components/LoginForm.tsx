@@ -47,25 +47,27 @@ export default function LoginForm() {
   };
 
   return (
-    <form className="mt-8 space-y-6" onSubmit={handleSubmit(onSubmit)}>
-      <div className="space-y-4">
-        <Input
-          label="Email"
-          type="email"
-          autoComplete="email"
-          {...register("email", {
-            required: "Email is required",
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: "Invalid email format",
-            },
-          })}
-          error={errors.email?.message}
-        />
-
-        <div className="relative">
+    <form className="space-y-8" onSubmit={handleSubmit(onSubmit)}>
+      <div className="space-y-6">
+        <div className="animate-in slide-in-from-right duration-500 delay-200">
           <Input
-            label="Password"
+            label="email"
+            type="email"
+            autoComplete="email"
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                message: "Invalid email format",
+              },
+            })}
+            error={errors.email?.message}
+          />
+        </div>
+
+        <div className="relative animate-in slide-in-from-right duration-500 delay-300">
+          <Input
+            label="password"
             type={showPassword ? "text" : "password"}
             autoComplete="current-password"
             {...register("password", { required: "Password is required" })}
@@ -73,26 +75,26 @@ export default function LoginForm() {
           />
           <button
             type="button"
-            className="absolute right-3 top-8 flex items-center"
+            className="absolute right-0 top-8 flex items-center text-white/40 hover:text-white transition-all duration-300 transform hover:scale-110"
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? (
-              <EyeOff className="h-4 w-4 text-gray-400" />
+              <EyeOff className="h-4 w-4" />
             ) : (
-              <Eye className="h-4 w-4 text-gray-400" />
+              <Eye className="h-4 w-4" />
             )}
           </button>
         </div>
       </div>
 
-      <div>
+      <div className="animate-in slide-in-from-bottom duration-500 delay-400">
         <Button
           type="submit"
           className="w-full"
           loading={isLoading}
           disabled={isLoading}
         >
-          Sign in
+          enter
         </Button>
       </div>
     </form>

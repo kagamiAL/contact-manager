@@ -1,14 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { X } from "lucide-react";
-import Button from "@/components/ui/Button";
+import { ContactBody, EditContactBody, Contact } from "@/lib/types";
 import Input from "@/components/ui/Input";
-import type { Contact, ContactBody, EditContactBody } from "@/lib/types";
+import Button from "@/components/ui/Button";
 
 interface ContactFormProps {
-  contact?: Contact;
+  contact?: Contact | null;
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (data: ContactBody | EditContactBody) => Promise<void>;
@@ -23,118 +22,117 @@ export default function ContactForm({
   const {
     register,
     handleSubmit,
-    reset,
     formState: { errors, isSubmitting },
-  } = useForm<ContactBody>();
-
-  useEffect(() => {
-    if (contact) {
-      reset({
-        firstName: contact.firstName,
-        lastName: contact.lastName,
-        zipCode: contact.zipCode,
-        dateOfBirth: contact.dateOfBirth,
-      });
-    } else {
-      reset({
-        firstName: "",
-        lastName: "",
-        zipCode: "",
-        dateOfBirth: "",
-      });
-    }
-  }, [contact, reset]);
-
-  if (!isOpen) return null;
+    reset,
+  } = useForm<ContactBody>({
+    defaultValues: contact
+      ? {
+          firstName: contact.firstName,
+          lastName: contact.lastName,
+          zipCode: contact.zipCode,
+          dateOfBirth: contact.dateOfBirth,
+        }
+      : undefined,
+  });
 
   const handleFormSubmit = async (data: ContactBody) => {
     try {
       if (contact) {
-        await onSubmit({ ...data, Id: contact.id } as EditContactBody);
+        // For editing, include the ID and make optional fields
+        const editData: EditContactBody = {
+          Id: contact.id,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          zipCode: data.zipCode,
+          dateOfBirth: data.dateOfBirth,
+        };
+        await onSubmit(editData);
       } else {
+        // For new contact
         await onSubmit(data);
       }
+
+      reset();
       onClose();
     } catch (error) {
       // Error is handled in parent component
     }
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center">
-        {/* Background overlay */}
-        <div
-          className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-          onClick={onClose}
-        />
+    <div className="fixed inset-0 z-50 flex items-center justify-center animate-in fade-in duration-300">
+      <div
+        className="absolute inset-0 bg-black/80 backdrop-blur-sm animate-in fade-in duration-300"
+        onClick={onClose}
+      />
 
-        {/* Modal panel */}
-        <div className="relative inline-block align-bottom bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full z-10">
-          <div className="bg-gray-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-white">
-                {contact ? "Edit Contact" : "Add New Contact"}
-              </h3>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={onClose}
-                className="p-1"
-              >
-                <X className="h-5 w-5" />
-              </Button>
-            </div>
+      <div className="relative bg-black border border-white/20 w-full max-w-md mx-4 p-8 animate-in slide-in-from-bottom-8 fade-in duration-500 shadow-2xl shadow-white/5">
+        <div className="flex items-center justify-between mb-8">
+          <h3 className="text-xl font-light text-white animate-in slide-in-from-left duration-700">
+            {contact ? "edit person" : "new person"}
+          </h3>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onClose}
+            className="p-0 hover:rotate-90 transition-transform duration-300"
+          >
+            <X className="h-5 w-5" />
+          </Button>
+        </div>
 
-            <form
-              onSubmit={handleSubmit(handleFormSubmit)}
-              className="space-y-4"
-            >
-              <div className="grid grid-cols-2 gap-4">
-                <Input
-                  label="First Name"
-                  {...register("firstName", {
-                    required: "First name is required",
-                  })}
-                  error={errors.firstName?.message}
-                />
-                <Input
-                  label="Last Name"
-                  {...register("lastName", {
-                    required: "Last name is required",
-                  })}
-                  error={errors.lastName?.message}
-                />
-              </div>
-
+        <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-8">
+          <div className="space-y-6">
+            <div className="animate-in slide-in-from-right duration-500 delay-100">
               <Input
-                label="Zip Code"
+                label="first name"
+                {...register("firstName", {
+                  required: "First name is required",
+                })}
+                error={errors.firstName?.message}
+              />
+            </div>
+            <div className="animate-in slide-in-from-right duration-500 delay-200">
+              <Input
+                label="last name"
+                {...register("lastName", {
+                  required: "Last name is required",
+                })}
+                error={errors.lastName?.message}
+              />
+            </div>
+            <div className="animate-in slide-in-from-right duration-500 delay-300">
+              <Input
+                label="zip code"
                 {...register("zipCode", {
                   required: "Zip code is required",
                 })}
                 error={errors.zipCode?.message}
               />
-
+            </div>
+            <div className="animate-in slide-in-from-right duration-500 delay-400">
               <Input
-                label="Date of Birth"
+                label="date of birth"
                 type="date"
                 {...register("dateOfBirth", {
                   required: "Date of birth is required",
                 })}
                 error={errors.dateOfBirth?.message}
               />
-
-              <div className="flex justify-end space-x-3 pt-4">
-                <Button type="button" variant="secondary" onClick={onClose}>
-                  Cancel
-                </Button>
-                <Button type="submit" loading={isSubmitting}>
-                  {contact ? "Update Contact" : "Add Contact"}
-                </Button>
-              </div>
-            </form>
+            </div>
           </div>
-        </div>
+
+          <div className="flex justify-between pt-8 animate-in slide-in-from-bottom duration-500 delay-500">
+            <Button type="button" variant="ghost" onClick={onClose}>
+              cancel
+            </Button>
+            <Button type="submit" loading={isSubmitting}>
+              {contact ? "save changes" : "add person"}
+            </Button>
+          </div>
+        </form>
       </div>
     </div>
   );

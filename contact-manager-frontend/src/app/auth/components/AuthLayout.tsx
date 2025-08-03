@@ -14,16 +14,13 @@ export default function AuthLayout({
   icon,
 }: AuthLayoutProps) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div>
-          <div className="mx-auto h-12 w-12 flex items-center justify-center rounded-full bg-white">
-            {icon}
-          </div>
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
-            {title}
+    <div className="min-h-screen flex items-center justify-center bg-black px-8">
+      <div className="max-w-sm w-full">
+        <div className="text-center mb-16">
+          <h2 className="text-2xl font-extralight text-white mb-4 tracking-wider">
+            {title.toLowerCase()}
           </h2>
-          <p className="mt-2 text-center text-sm text-gray-400">{subtitle}</p>
+          <p className="text-white/40 text-sm font-light">{subtitle}</p>
         </div>
         {children}
       </div>

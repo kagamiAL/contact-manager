@@ -62,58 +62,34 @@ export default function Pagination({
   if (totalPages <= 1) return null;
 
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center space-x-2">
+    <div className="flex items-center justify-center space-x-6">
+      {currentPage > 0 && (
         <Button
           variant="ghost"
           size="sm"
           onClick={() => onPageChange(currentPage - 1)}
-          disabled={currentPage === 0 || isLoading}
-          className="flex items-center space-x-1"
+          disabled={isLoading}
+          className="text-xs"
         >
-          <ChevronLeft className="h-4 w-4" />
-          <span>Previous</span>
+          previous
         </Button>
+      )}
 
-        <div className="flex items-center space-x-1">
-          {generatePageNumbers().map((page, index) =>
-            page === -1 ? (
-              <span
-                key={`ellipsis-${index}`}
-                className="px-2 py-1 text-gray-500"
-              >
-                ...
-              </span>
-            ) : (
-              <Button
-                key={page}
-                variant={currentPage === page ? "primary" : "ghost"}
-                size="sm"
-                onClick={() => onPageChange(page)}
-                disabled={isLoading}
-                className="w-8 h-8 p-0"
-              >
-                {page + 1}
-              </Button>
-            )
-          )}
-        </div>
+      <span className="text-white/40 text-xs">
+        {currentPage + 1} of {totalPages}
+      </span>
 
+      {currentPage < totalPages - 1 && (
         <Button
           variant="ghost"
           size="sm"
           onClick={() => onPageChange(currentPage + 1)}
-          disabled={currentPage === totalPages - 1 || isLoading}
-          className="flex items-center space-x-1"
+          disabled={isLoading}
+          className="text-xs"
         >
-          <span>Next</span>
-          <ChevronRight className="h-4 w-4" />
+          next
         </Button>
-      </div>
-
-      <div className="text-sm text-gray-600 dark:text-gray-400">
-        Page {currentPage + 1} of {totalPages}
-      </div>
+      )}
     </div>
   );
 }

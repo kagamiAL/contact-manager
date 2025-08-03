@@ -1,6 +1,5 @@
 "use client";
 
-import { Plus } from "lucide-react";
 import Button from "@/components/ui/Button";
 
 interface ContactsHeaderProps {
@@ -9,18 +8,22 @@ interface ContactsHeaderProps {
 
 export default function ContactsHeader({ onAddContact }: ContactsHeaderProps) {
   return (
-    <div className="mb-8">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-white">Contacts</h1>
-          <p className="mt-1 text-sm text-gray-400">
-            Manage your contacts and stay connected
+    <div className="mb-16">
+      <div className="flex items-end justify-between">
+        <div className="animate-in slide-in-from-left duration-700">
+          <p className="text-white/40 text-sm font-light mb-2">
+            people you know
           </p>
         </div>
-        <Button onClick={onAddContact} className="flex items-center space-x-2">
-          <Plus className="h-4 w-4" />
-          <span>Add Contact</span>
-        </Button>
+        <div className="animate-in slide-in-from-right duration-700">
+          <Button
+            onClick={onAddContact}
+            variant="secondary"
+            className="text-sm font-light"
+          >
+            add person
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { cn } from "@/lib/utils";
 
@@ -21,10 +23,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const variants = {
-      primary: "bg-white text-black hover:bg-gray-200 focus:ring-white",
-      secondary: "bg-gray-800 text-white hover:bg-gray-700 focus:ring-gray-600",
-      danger: "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500",
-      ghost: "text-gray-300 hover:bg-gray-800 focus:ring-gray-600",
+      primary:
+        "bg-white text-black hover:bg-white/90 hover:shadow-lg hover:shadow-white/20 focus:outline-none transition-all duration-300 transform hover:scale-105 active:scale-95",
+      secondary:
+        "bg-transparent border border-white/20 text-white hover:bg-white hover:text-black hover:shadow-lg hover:shadow-white/10 focus:outline-none transition-all duration-300 transform hover:scale-105 active:scale-95",
+      danger:
+        "bg-transparent border border-red-500/50 text-red-500 hover:bg-red-500 hover:text-white focus:outline-none transition-all duration-300 transform hover:scale-105 active:scale-95",
+      ghost:
+        "text-white/60 hover:text-white focus:outline-none transition-all duration-300 transform hover:scale-105 active:scale-95",
     };
 
     const sizes = {
@@ -36,7 +42,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <button
         className={cn(
-          "inline-flex items-center justify-center rounded-md font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none",
+          "inline-flex items-center justify-center font-light tracking-wide disabled:opacity-50 disabled:pointer-events-none",
           variants[variant],
           sizes[size],
           className

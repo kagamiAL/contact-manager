@@ -35,18 +35,16 @@ export default function ContactsList({
 
   if (contacts.content.length === 0) {
     return (
-      <div className="text-center py-12">
-        <Users className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-        <h3 className="text-lg font-semibold text-white mb-2">
-          {searchQuery ? "No contacts found" : "No contacts yet"}
-        </h3>
-        <p className="text-gray-400 mb-4">
-          {searchQuery
-            ? "Try adjusting your search criteria or clear the search to see all contacts."
-            : "Get started by adding your first contact."}
+      <div className="text-center py-20 animate-in fade-in slide-in-from-bottom duration-700">
+        <p className="text-white/40 text-sm font-light mb-8 animate-in slide-in-from-top duration-500">
+          {searchQuery ? "no matches found" : "no people yet"}
         </p>
         {!searchQuery && (
-          <Button onClick={onAddContact}>Add Your First Contact</Button>
+          <div className="animate-in slide-in-from-bottom duration-500 delay-200">
+            <Button onClick={onAddContact} variant="secondary">
+              add your first person
+            </Button>
+          </div>
         )}
       </div>
     );
@@ -54,19 +52,24 @@ export default function ContactsList({
 
   return (
     <>
-      <div className="grid gap-4">
-        {contacts.content.map((contact) => (
-          <ContactCard
+      <div className="space-y-0">
+        {contacts.content.map((contact, index) => (
+          <div
             key={contact.id}
-            contact={contact}
-            onEdit={onEditContact}
-            onDelete={onDeleteContact}
-          />
+            className="animate-in slide-in-from-bottom duration-500"
+            style={{ animationDelay: `${index * 100}ms` }}
+          >
+            <ContactCard
+              contact={contact}
+              onEdit={onEditContact}
+              onDelete={onDeleteContact}
+            />
+          </div>
         ))}
       </div>
 
       {contacts.totalPages > 1 && (
-        <div className="mt-8">
+        <div className="mt-12 text-center">
           <Pagination
             currentPage={contacts.page}
             totalPages={contacts.totalPages}

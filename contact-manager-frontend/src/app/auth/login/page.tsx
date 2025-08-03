@@ -7,15 +7,15 @@ import LoginForm from "../components/LoginForm";
 export default function LoginPage() {
   return (
     <AuthLayout
-      title="Sign in to your account"
+      title="welcome back"
       subtitle={
         <>
-          Or{" "}
+          or{" "}
           <Link
             href="/auth/register"
-            className="font-medium text-white hover:text-gray-300"
+            className="text-white border-b border-white/40 hover:border-white transition-colors duration-300"
           >
-            create a new account
+            create account
           </Link>
         </>
       }
