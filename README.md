@@ -47,6 +47,7 @@ cd contact-manager
   `contact_manager_backend/src/main/resources/application.properties`
 
 ```bash
+cd contact_manager_frontend
 # Run backend (from backend directory)
 ./mvnw spring-boot:run
 ```
