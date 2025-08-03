@@ -40,6 +40,24 @@ git clone https://github.com/kagamiAL/contact-manager
 cd contact-manager
 ````
 
+### 2. Environment Setup
+
+#### 2.a. Backend (`contact_manager_backend/.env`)
+
+You **must** create a `.env` file in the `contact_manager_backend` directory with this content:
+
+```
+TOKEN_SECRET_KEY=VmrOyyLnVSmgrBgBAfPXKebWYeigBoxbvzCRlhPVddYmeLDoVr
+```
+
+#### 2.b. Frontend (`contact-manager-frontend/.env`)
+
+You can **optionally** create a `.env` file in the `contact_manager_frontend` directory if you want to change the API URL (for example, if your backend is not running on localhost):
+
+```
+NEXT_PUBLIC_API_URL=https://localhost:8080
+```
+
 ### 2. Backend setup
 
 * Create a PostgreSQL database.
