@@ -19,10 +19,10 @@ export default function Home() {
   }, [isAuthenticated, router]);
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen flex items-center justify-center bg-black">
       <div className="text-center">
-        <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-blue-600" />
-        <p className="text-gray-600 dark:text-gray-400">Redirecting...</p>
+        <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-white" />
+        <p className="text-gray-400">Redirecting...</p>
       </div>
     </div>
   );

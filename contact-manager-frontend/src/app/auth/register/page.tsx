@@ -13,13 +13,13 @@ export default function RegisterPage() {
           Or{" "}
           <Link
             href="/auth/login"
-            className="font-medium text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
+            className="font-medium text-white hover:text-gray-300"
           >
             sign in to your existing account
           </Link>
         </>
       }
-      icon={<UserPlus className="h-6 w-6 text-blue-600 dark:text-blue-400" />}
+      icon={<UserPlus className="h-6 w-6 text-black" />}
     >
       <RegisterForm />
     </AuthLayout>

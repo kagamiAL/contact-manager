@@ -56,8 +56,5 @@ export interface PaginatedResponse<T> {
   totalPages: number;
 }
 
-// Theme Types
-export type Theme = "light" | "dark";
-
 // Search Types
 export type SearchType = "firstName" | "lastName" | "fullName";
