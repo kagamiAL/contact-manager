@@ -10,6 +10,7 @@ import ContactsStats from "./ContactsStats";
 import ContactsList from "./ContactsList";
 import SearchBar from "@/components/contacts/SearchBar";
 import ContactForm from "@/components/contacts/ContactForm";
+import PaginationControls from "@/components/contacts/PaginationControls";
 import type { Contact } from "@/lib/types";
 
 export default function DashboardContent() {
@@ -18,11 +19,18 @@ export default function DashboardContent() {
     contacts,
     isLoading,
     searchQuery,
+    pageSize,
+    sortBy,
+    ascending,
+    searchContacts,
+    clearSearch,
+    addContact,
+    updateContact,
+    deleteContact,
     handlePageChange,
-    handleSearch,
-    handleClearSearch,
-    handleDeleteContact,
-    handleFormSubmit,
+    handlePageSizeChange,
+    handleSortChange,
+    handleSortDirectionChange,
   } = useContacts();
 
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -38,9 +46,31 @@ export default function DashboardContent() {
     setIsFormOpen(true);
   };
 
+  const handleDeleteContact = async (id: number) => {
+    try {
+      await deleteContact(id);
+    } catch (error) {
+      // Error is already handled in the hook
+    }
+  };
+
+  const handleFormSubmit = async (data: any) => {
+    try {
+      if (editingContact) {
+        await updateContact(data);
+      } else {
+        await addContact(data);
+      }
+      setIsFormOpen(false);
+      setEditingContact(undefined);
+    } catch (error) {
+      // Error is already handled in the hook
+    }
+  };
+
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="flex items-center justify-center min-h-screen">
         <Loader2 className="h-8 w-8 animate-spin" />
       </div>
     );
@@ -51,12 +81,21 @@ export default function DashboardContent() {
       <ContactsHeader onAddContact={handleAddContact} />
 
       <SearchBar
-        onSearch={handleSearch}
-        onClear={handleClearSearch}
+        onSearch={searchContacts}
+        onClear={clearSearch}
         isLoading={isLoading}
       />
 
       <ContactsStats totalContacts={contacts.totalElements} />
+
+      <PaginationControls
+        pageSize={pageSize}
+        sortBy={sortBy}
+        ascending={ascending}
+        onPageSizeChange={handlePageSizeChange}
+        onSortChange={handleSortChange}
+        onSortDirectionChange={handleSortDirectionChange}
+      />
 
       <ContactsList
         contacts={contacts}

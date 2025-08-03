@@ -44,8 +44,8 @@ export interface EditContactBody {
 export interface PageableParams {
   page: number;
   size: number;
-  sortBy: string;
-  ascending: boolean;
+  sortBy?: string;
+  ascending?: boolean;
 }
 
 export interface PaginatedResponse<T> {
