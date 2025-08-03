@@ -1,49 +1,47 @@
-## 📱 Contact Manager
+# 📱 Contact Manager
 
-*A full-stack contact manager built with Java (Spring Boot), PostgreSQL, and React (Next.js). Secure, searchable, and modern. Access your contacts anywhere.*
+_A full-stack contact manager built with Java (Spring Boot), PostgreSQL, and React (Next.js). Secure, searchable, and modern. Access your contacts anywhere._
 
----
-
-### 🧩 Features
-
-* **JWT-based authentication** for secure access
-* **Search contacts** quickly by name or other fields
-* **Batch edit** multiple contacts at once for faster updates
-* **Fast CRUD**: Add, edit, and remove contacts
-* **Optimized duplicate detection** using hashing
-* **Modern UI** with React & Next.js for a smooth user experience
-* **RESTful API** design & best practices
+<p align="center">
+  <img src="https://img.shields.io/badge/Java-17+-red?logo=java&logoColor=white&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Spring_Boot-3.x-brightgreen?logo=springboot&logoColor=white&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/PostgreSQL-15+-316192?logo=postgresql&logoColor=white&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/React-Next.js-61DAFB?logo=react&logoColor=black&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/JWT-Auth-000000?logo=jsonwebtokens&logoColor=white&style=for-the-badge" />
+</p>
 
 ---
 
-### 🛠️ Tech Stack
+## 🧩 Features
 
-* **Backend:** Java, Spring Boot, Spring Security, Spring JPA, JWT
-* **Frontend:** React (Next.js)
-* **Database:** PostgreSQL
-* **Skills demonstrated:** API design, modular monolith architecture, secure JWT auth, batch processing, smart search
+- **JWT-based authentication** for secure access
+- **Search contacts** by name or fields
+- **Batch edit** multiple contacts at once
+- **Pagination** for smooth browsing through large contact lists
+- **Fast CRUD:** Add, edit, and remove contacts
+- **Optimized duplicate detection** using hashing
+- **Modern UI** with React & Next.js
+- **RESTful API** design & best practices
 
 ---
 
-### 🚀 Getting Started
+## 🚀 Getting Started
 
-You’ll need:
+**You’ll need:**
+- Java 17+
+- Node.js & npm
+- PostgreSQL (local or remote)
 
-* Java 17+
-* Node.js & npm
-* PostgreSQL (local or remote)
-
-#### 1. Clone the repository
-
+### 1. Clone the repository
 ```bash
 git clone https://github.com/kagamiAL/contact-manager
 cd contact-manager
-```
+````
 
-#### 2. Backend setup
+### 2. Backend setup
 
 * Create a PostgreSQL database.
-* Edit:
+* Edit your settings in
   `contact_manager_backend/src/main/resources/application.properties`
 
 ```bash
@@ -51,7 +49,7 @@ cd contact-manager
 ./mvnw spring-boot:run
 ```
 
-#### 3. Frontend setup
+### 3. Frontend setup
 
 ```bash
 cd contact_manager_frontend
@@ -59,13 +57,13 @@ npm install
 npm run dev
 ```
 
-* App runs at [http://localhost:3000](http://localhost:3000)
+* By default, the app runs at [http://localhost:3000](http://localhost:3000)
 
 ---
 
-### 📂 Project Structure
+## 📂 Project Structure
 
-```text
+```
 /
 ├── contact_manager_backend/   # Spring Boot backend
 ├── contact_manager_frontend/  # Next.js React frontend
@@ -74,9 +72,9 @@ npm run dev
 
 ---
 
-### 🧠 Why This Project?
+## 🧠 Why This Project?
 
-* Demonstrates real-world API design and full-stack app architecture
-* Implements secure JWT authentication and efficient batch actions
-* Includes fast contact search and duplicate detection
-* Built with modular best practices (Spring Boot + React)
+* Real-world API design and full-stack architecture
+* Secure JWT authentication and efficient batch actions
+* Fast contact search, pagination, and duplicate detection
+* Modular best practices (Spring Boot + React)
