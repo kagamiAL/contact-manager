@@ -2,9 +2,7 @@
 
 https://github.com/user-attachments/assets/0a397455-6bc0-4678-8c3c-30467dae7aca
 
-_A full-stack contact manager 
-
-built with Java (Spring Boot), PostgreSQL, and React (Next.js). Secure, searchable, and modern. Access your contacts anywhere._
+_A full-stack contact manager built with Java (Spring Boot), PostgreSQL, and React (Next.js). Secure, searchable, and modern. Access your contacts anywhere._
 
 <p align="center">
   <img src="https://img.shields.io/badge/Java-17+-red?logo=java&logoColor=white&style=for-the-badge" />
