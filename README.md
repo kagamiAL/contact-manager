@@ -3,7 +3,7 @@
 _A full-stack contact manager built with Java (Spring Boot), PostgreSQL, and React (Next.js). Secure, searchable, and modern. Access your contacts anywhere._
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Java-17+-red?logo=java&logoColor=white&style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Java-23+-red?logo=java&logoColor=white&style=for-the-badge" />
   <img src="https://img.shields.io/badge/Spring_Boot-3.x-brightgreen?logo=springboot&logoColor=white&style=for-the-badge" />
   <img src="https://img.shields.io/badge/PostgreSQL-15+-316192?logo=postgresql&logoColor=white&style=for-the-badge" />
   <img src="https://img.shields.io/badge/React-Next.js-61DAFB?logo=react&logoColor=black&style=for-the-badge" />
@@ -30,7 +30,7 @@ https://github.com/user-attachments/assets/c2f1b03e-2555-4cda-a132-30da3fe8840d
 ## Getting Started
 
 **You’ll need:**
-- Java 17+
+- Java 23+
 - Node.js & npm
 - PostgreSQL (local or remote)
 
