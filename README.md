@@ -1,4 +1,4 @@
-# 📱 Contact Manager
+# Contact Manager
 
 _A full-stack contact manager built with Java (Spring Boot), PostgreSQL, and React (Next.js). Secure, searchable, and modern. Access your contacts anywhere._
 
@@ -14,7 +14,7 @@ https://github.com/user-attachments/assets/c2f1b03e-2555-4cda-a132-30da3fe8840d
 
 ---
 
-## 🧩 Features
+## Features
 
 - **JWT-based authentication** for secure access
 - **Search contacts** by name or fields
@@ -27,7 +27,7 @@ https://github.com/user-attachments/assets/c2f1b03e-2555-4cda-a132-30da3fe8840d
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 **You’ll need:**
 - Java 17+
@@ -82,7 +82,7 @@ npm run dev
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```
 /
@@ -93,7 +93,7 @@ npm run dev
 
 ---
 
-## 🧠 Why This Project?
+## Why This Project?
 
 * Real-world API design and full-stack architecture
 * Secure JWT authentication and efficient batch actions
