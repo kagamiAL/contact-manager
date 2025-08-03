@@ -87,7 +87,7 @@ npm run dev
 ```
 /
 ├── contact_manager_backend/   # Spring Boot backend
-├── contact_manager_frontend/  # Next.js React frontend
+├── contact-manager-frontend/  # Next.js React frontend
 └── README.md
 ```
 
