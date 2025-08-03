@@ -10,6 +10,8 @@ _A full-stack contact manager built with Java (Spring Boot), PostgreSQL, and Rea
   <img src="https://img.shields.io/badge/JWT-Auth-000000?logo=jsonwebtokens&logoColor=white&style=for-the-badge" />
 </p>
 
+![Demo Gif](https://i.imgur.com/ulzuaen.gif)
+
 ---
 
 ## 🧩 Features
