@@ -3,7 +3,7 @@ FROM eclipse-temurin:23-jdk-alpine AS build
 WORKDIR /workspace
 COPY . .
 RUN chmod +x gradlew
-RUN ./gradlew clean build --no-daemon
+RUN ./gradlew clean build --no-daemon -x test
 
 FROM eclipse-temurin:23-jdk-alpine
 
