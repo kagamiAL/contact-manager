@@ -44,10 +44,14 @@ cd contact-manager
 
 #### 2.a. Backend (`contact_manager_backend/.env`)
 
-You **must** create a `.env` file in the `contact_manager_backend` directory with this content:
+You **must** create a `.env` file in the `contact_manager_backend` directory and fill out the following variables:
 
 ```
-TOKEN_SECRET_KEY=VmrOyyLnVSmgrBgBAfPXKebWYeigBoxbvzCRlhPVddYmeLDoVr
+TOKEN_SECRET_KEY={YOUR_SECRET_KEY_HERE}
+DB_URL={YOUR_DATABASE_URL_HERE}
+DB_USERNAME={YOUR_DATABASE_USERNAME_HERE}
+DB_PASSWORD={YOUR_DATABASE_PASSWORD_HERE}
+FRONTEND_URL={YOUR_FRONTEND_URL_HERE} -- For CORS
 ```
 
 #### 2.b. Frontend (`contact-manager-frontend/.env`)
@@ -60,9 +64,8 @@ NEXT_PUBLIC_API_URL=https://localhost:8080
 
 ### 2. Backend setup
 
-* Create a PostgreSQL database.
-* Edit your settings in
-  `contact_manager_backend/src/main/resources/application.properties`
+* Make sure you've filled out the environmental variables for the backend.
+* This project is compatible with PostgreSQL
 
 ```bash
 # Run backend (from backend directory)
